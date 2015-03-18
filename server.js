@@ -5,18 +5,13 @@
 var express    = require('express');		// call express
 var app        = express(); 				// define our app using express
 var bodyParser = require('body-parser'); 	// get body-parser
-//var mongoose   = require('mongoose');
-//var MongoClient = require('mongodb').MongoClient
-//var format = require('util').format;
-var config 	   = require('./config');
 var path 	   = require('path');
-
-//var User       = require('./app/models/user');
 var jwt        = require('jsonwebtoken');
 
+//config
+var config 	   = require('./config');
 //get the db
 var userDb = require('./userDb');
-
 // super secret for creating tokens
 var superSecret = config.secret;
 
@@ -26,16 +21,8 @@ var superSecret = config.secret;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// configure our app to handle CORS requests
-app.use(function(req, res, next) {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-	next();
-});
 
-// connect to our database (hosted on modulus.io)
-//mongoose.connect(config.database); 
+
 
 // set static files location
 // used for requests that our frontend will make
