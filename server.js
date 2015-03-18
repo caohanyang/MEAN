@@ -5,14 +5,8 @@
 var express    = require('express');		// call express
 var app        = express(); 				// define our app using express
 var bodyParser = require('body-parser'); 	// get body-parser
-//var mongoose   = require('mongoose');
-//var MongoClient = require('mongodb').MongoClient
-//var format = require('util').format;
 var config 	   = require('./config');
 var path 	   = require('path');
-
-//var User       = require('./app/models/user');
-var jwt        = require('jsonwebtoken');
 
 //get the db
 var userDb = require('./userDb');
