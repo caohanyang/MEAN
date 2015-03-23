@@ -6,25 +6,25 @@ angular.module('app.routes', ['ngRoute'])
 
      //home page route
      .when('/', {
-        templateUrl : 'app/views/pages/users/all.html',
+        templateUrl : 'public/app/views/pages/users/all.html',
         controller  : 'userListController'
      })
          
      // show all users
      .when('/users', {
-        templateUrl : 'app/views/pages/users/all.html',
+        templateUrl : 'public/app/views/pages/users/all.html',
         controller  : 'userListController'
      })
 
      //form to create a new user
      .when('/users/create',{
-        templateUrl : 'app/views/pages/users/create.html',
+        templateUrl : 'public/app/views/pages/users/create.html',
         controller  : 'userCreateController'
      })
 
      //page to edit a user
      .when('/users/:user_id', {
-        templateUrl: 'app/views/pages/users/edit.html',
+        templateUrl: 'public/app/views/pages/users/edit.html',
         controller : 'userEditController'
      });
     //get rid of the hashtag in the URL
