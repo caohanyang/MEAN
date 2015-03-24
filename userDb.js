@@ -4,6 +4,7 @@ var assert = require('assert');
 var config  = require('./config');
 var bodyParser = require('body-parser');
 var ObjectID = require('mongodb').ObjectID;
+var jsondiffpatch = require('jsondiffpatch');
 var db;
 
 // connect to Server
@@ -76,18 +77,23 @@ exports.addUser = function(req, res){
 // update
 exports.updateUser = function(req, res){
 	var id = req.params.user_id;
-	var user = req.body;
-	user._id = BSON.ObjectID(id);
-	console.log('Updating user:'+ id);
-
+	var delta = req.body;
+	// user._id = BSON.ObjectID(id);
 	db.collection('users', function(err, collection){
 		assert.equal(err, null); 
-		collection.save(user, function(err, result){
-		//collection.update({ '_id': id }, user, { safe:true }, function(err, result){
+		collection.findOne({'_id': BSON.ObjectID(id)}, function(err, user){
 			assert.equal(err, null);
-			console.log( result + ' document(s) updated.');
-			console.log(user);
-			res.send(user);
+			// console.log(user);
+			jsondiffpatch.patch(user, delta);
+			// console.log(user);
+			delete user['$resolved'];
+			// console.log(user);
+			user._id = BSON.ObjectID(id);
+			collection.save(user, function(err, result){
+				// collection.update({ '_id': BSON.ObjectID(id) }, user, { safe:true }, function(err, result){
+				assert.equal(err, null);
+				console.log( result + ' document(s) updated.');
+			});
 		});
 	    
 	 });

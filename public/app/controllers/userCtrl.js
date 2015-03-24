@@ -33,16 +33,21 @@ angular.module('userCtrl', [])
    //a new controller used to edit the user data
    .controller('userEditController', function($scope, $routeParams, $window, User) {
      $scope.updateUser = function(){
+       var newUser = $scope.user;
+       // console.log(newUser);
+       var oldUser = User.get({id:$routeParams.user_id});
+       // console.log(oldUser);
+       var delta = jsondiffpatch.diff(oldUser, newUser);
+       // console.log(delta);
+       User.update({id:$routeParams.user_id}, delta);
 
-       $scope.user.$update(function(){
-          $window.location.href = ''; //redirect to home
-       });
      };
      
      $scope.loadUser = function(){
         $scope.user = User.get({id:$routeParams.user_id});
      };
- 
-    $scope.loadUser();
+          
+        $scope.loadUser();
+
    });
 
