@@ -4,6 +4,8 @@ var assert = require('assert');
 var config  = require('./config');
 var bodyParser = require('body-parser');
 var ObjectID = require('mongodb').ObjectID;
+//use the JSONDIFFPATCH
+var jsondiffpatch = require('jsondiffpatch').create();
 var db;
 
 // connect to Server
@@ -41,7 +43,7 @@ exports.findById = function(req, res){
 			res.send(err);
 		} else {
 			collection.findOne({'_id': BSON.ObjectID(id)}, function(err, item){
-			//collection.findOne({'_id': id}, function(err, item){
+			
 				if (err) {
 					res.send(err);
 				} else {
@@ -64,8 +66,8 @@ exports.addUser = function(req, res){
 				if (err) {
 					res.send(err);
 				} else {
-					console.log('Success:'+ JSON.stringify(result));
-					res.send(result);
+					console.log('Success:'+ JSON.stringify(result[0]));
+					res.send(result[0]);
 				}
 			});
 		}
@@ -75,21 +77,33 @@ exports.addUser = function(req, res){
 
 // update
 exports.updateUser = function(req, res){
+	//get the id
 	var id = req.params.user_id;
-	var user = req.body;
-	user._id = BSON.ObjectID(id);
-	console.log('Updating user:'+ id);
-
+    // get the delta
+	var delta = req.body;
+  
+    //prepare to update the data
 	db.collection('users', function(err, collection){
 		assert.equal(err, null); 
-		collection.save(user, function(err, result){
-		//collection.update({ '_id': id }, user, { safe:true }, function(err, result){
-			assert.equal(err, null);
-			console.log( result + ' document(s) updated.');
-			console.log(user);
-			res.send(user);
-		});
+        
+        //find the old value
+        collection.findOne({'_id': BSON.ObjectID(id)}, function(err, user){
+        	 assert.equal(err, null);
+
+		     // patch original
+             jsondiffpatch.patch(user, delta);
+          
+             //change the type of id
+             user._id = BSON.ObjectID(id);
+
+             //save
+             collection.save(user, function(err, result){
+			   assert.equal(err, null);
+			   console.log( result + ' document(s) updated.');
+		  });
 	    
+	   });
+	
 	 });
 }
 

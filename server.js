@@ -22,9 +22,6 @@ var superSecret = config.secret;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-
-
 // set static files location
 // used for requests that our frontend will make
 app.use(express.static(__dirname ));
