@@ -13,8 +13,6 @@ var path 	   = require('path');
 
 //get the db
 var userDb = require('./userDb');
-// super secret for creating tokens
-var superSecret = config.secret;
 
 // APP CONFIGURATION ==================
 // ====================================

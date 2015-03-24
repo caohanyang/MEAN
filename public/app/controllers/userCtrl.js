@@ -36,7 +36,7 @@ angular.module('userCtrl', [])
    .controller('userEditController', function($scope, $routeParams, $window, User) {
 
      $scope.updateUser = function(){
-      
+    
       //get the old value
       var dataOld = JSON.parse(JSON.stringify($scope.old));
       //get the new value
@@ -51,6 +51,7 @@ angular.module('userCtrl', [])
 
       $window.location.href = ''; //redirect to home 
     };
+
      
      $scope.loadUser = function(){
 
