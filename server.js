@@ -54,7 +54,7 @@ var apiRouter = express.Router();
 		// update the user with this id
         .put(userDb.updateUser)
 		// delete the user with this id
-       .delete(userDb.deleteUser);
+        .delete(userDb.deleteUser);
 
 	// api endpoint to get user information
 	apiRouter.get('/me', function(req, res) {

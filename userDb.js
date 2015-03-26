@@ -20,17 +20,14 @@ MongoClient.connect(config.database,function(err, database){
 exports.findAll = function(req, res){
 	db.collection('users',function(err, collection){
 		if (err) {
-			res.send(err);
-		} else {
-			collection.find().toArray(function(err, items){
-				if (err) {
-					res.send(err);
-				} else {
-					res.send(items);
-				}
-			});
-		}
-		
+			return res.send(err);
+		} 
+		collection.find().toArray(function(err, users){
+			if (err) {
+				return res.send(err);
+			}
+			res.send(users);
+		});
 	});
 }
 
@@ -43,13 +40,11 @@ exports.findById = function(req, res){
 		if (err) {
 			res.send(err);
 		} else {
-			collection.findOne({'_id': BSON.ObjectID(id)}, function(err, item){
-			
-				if (err) {
-					res.send(err);
-				} else {
-					res.send(item);
+			collection.findOne({'_id': BSON.ObjectID(id)}, function(err, user){
+				if (err){
+					return res.send(err);
 				}
+				res.send(user);
 			});
 		}
 	});
@@ -100,6 +95,7 @@ exports.updateUser = function(req, res){
              //save
              collection.save(user, function(err, result){
 			   assert.equal(err, null);
+			   res.end();
 			   console.log( result + ' document(s) updated.');
 		  });
 	    
@@ -116,6 +112,7 @@ exports.deleteUser = function(req, res){
 		assert.equal(err, null);
 		collection.remove({ '_id': BSON.ObjectID(id)}, { safe:true}, function(err, result){
 			assert.equal(err, null);
+			res.end();
 			console.log( result + ' document(s) deleted');
 		});
 	});

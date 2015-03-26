@@ -2,7 +2,7 @@
    <h1>Edit User</h1>
 </div>
 
-<form class="form-horizontal" ng-submit="updateUser()">
+<!-- <form class="form-horizontal" ng-submit="updateUser()">
    <div class="form-group">
       <label class="col-sm-2 control-label">Name</label>
       <div class="col-sm-6">
@@ -27,11 +27,25 @@
    <div class="form-group">
    <div class="col-sm-offest-2 col-sm-6">
 
-      <button type="submit"
-        class="btn btn-success btn-lg btn-block">Update User</button>
+      <button type="submit" class="btn btn-success btn-lg btn-block">Update User</button>
    </div>
    </div>
 
+</form> -->
+
+
+<form class="form-horizontal" ng-submit="updateUser()">
+   <div class="form-group">
+      <div class="col-sm-6">
+         <input type="text" class="form-control" value="Old JSON" disabled="disabled" />
+      </div>
+      <div class="col-sm-6">
+         <input type="text" class="form-control" value="New JSON" disabled="disabled" />
+      </div>
+   </div>
+   <textarea name="old" id="old" cols="78" rows="15" ng-model="old"></textarea>
+   <textarea name="new" id="new" cols="78" rows="15" ng-model="new"></textarea>
+   <button type="submit" class="btn btn-success btn-lg btn-block">Update User</button>
 </form>
 
 
