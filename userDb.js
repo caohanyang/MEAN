@@ -6,7 +6,6 @@ var bodyParser = require('body-parser');
 var ObjectID = require('mongodb').ObjectID;
 //use the JSONDIFFPATCH
 var jsondiffpatch = require('jsondiffpatch').create();
-
 var db;
 
 // connect to Server
@@ -73,10 +72,19 @@ exports.addUser = function(req, res){
 
 // update
 exports.updateUser = function(req, res){
+    //get the receive time
+	var receiveTime = Date.now();
+    
+    //get all the time data
+    var diffStartTime = req.body.diffStartTime;
+    var diffEndTime = req.body.diffEndTime;
+    var sendTime = req.body.sendTime;   
+         
 	//get the id
 	var id = req.params.user_id;
+	
     // get the delta
-	var delta = req.body;
+	var delta = req.body.delta;
   
     //prepare to update the data
 	db.collection('users', function(err, collection){
@@ -86,9 +94,24 @@ exports.updateUser = function(req, res){
         collection.findOne({'_id': BSON.ObjectID(id)}, function(err, user){
         	 assert.equal(err, null);
 
+             var patchStartTime = Date.now();          
 		     // patch original
              jsondiffpatch.patch(user, delta);
           
+             var patchEndTime = Date.now();
+
+             console.log("diffStartTime: " + diffStartTime);
+             console.log("diffEndTime: " + diffEndTime);
+             console.log("Call to diff took " + (diffEndTime - diffStartTime) + " milliseconds.");
+           
+             console.log("receiveTime " + receiveTime);
+             console.log("sendTime " + sendTime);
+             console.log("Call to send took " + (receiveTime - sendTime) + " milliseconds.");
+
+             console.log("patchStartTime" + patchStartTime);
+             console.log("patchEndTime" + patchEndTime);
+             console.log("Call to patch took " + (patchEndTime - patchStartTime) + " milliseconds.");
+
              //change the type of id
              user._id = BSON.ObjectID(id);
 

@@ -34,21 +34,33 @@ angular.module('userCtrl', [])
 
    //a new controller used to edit the user data
    .controller('userEditController', function($scope, $routeParams, $window, User) {
-      $scope.old = User.get({id:$routeParams.user_id}, function(){
-      $scope.old = JSON.stringify($scope.old, null, "  ");
-      // copy the previous data
-      $scope.new = angular.copy($scope.old);
+
+      $scope.old = User.get({id:$routeParams.user_id}, function() {
+        $scope.old = JSON.stringify($scope.old, null, "  ");
+        // copy the previous data
+        $scope.new = angular.copy($scope.old);
     });
      $scope.updateUser = function(){
 
       $scope.old = JSON.parse($scope.old);
       $scope.new = JSON.parse($scope.new);
       //use the jsondiffpacth to get a patch
+      var diffStartTime = Date.now();
       var delta = jsondiffpatch.diff($scope.old, $scope.new);
+      var diffEndTime = Date.now();
+
       console.log(delta);
 
+      var sendTime = Date.now();
+
+      var transmit = {
+        "diffStartTime": diffStartTime,
+        "diffEndTime": diffEndTime,
+        "sendTime": sendTime,
+        "delta": delta
+      };
       //send the delta data
-      User.update({id: $routeParams.user_id}, delta);
+      User.update({id: $routeParams.user_id}, transmit);
     };
 
  });
